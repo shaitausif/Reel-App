@@ -3,17 +3,25 @@ import { NextResponse } from "next/server"
 
 export default withAuth(
     function middleware(){
-        return NextResponse.next()
+        return NextResponse.next() // Allow request to continue
     },
     {
         callbacks : {
             authorized({req, token}){
+                // logic to allow or block
                 // if(token) return true; // If there's a token then user is authenticated
                 const {pathname} = req.nextUrl
+                if(token){
+                    if(pathname.startsWith("/login") || pathname.startsWith("/register")){
+                        return false
+                    }
+                }
                 if(
+                    (
                     pathname.startsWith("/api/auth") ||
                     pathname.startsWith("/login") || 
-                    pathname.startsWith("/register")
+                    pathname.startsWith("/register") 
+                    )
                 ){
                     return true //  These paths are accessible without even having a token
                 }

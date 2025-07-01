@@ -30,10 +30,13 @@ const FileUpload = ({
         if(fileType === "video"){
             if(!file.type.startsWith("video/")){
                 seterror("Please upload a valid video file")
+                return;
             }
         }
         if(file.size > 100 * 1024 * 1024){
+            
             seterror("File size must be less than 100 MB")
+            return;
         }
         return true
     }
@@ -81,12 +84,12 @@ const FileUpload = ({
                 }
                 const data = await res.json()
 
-                 const uploadResponse = await upload({
+                const uploadResponse = await upload({
                 // Authentication parameters
                 fileName: file.name,
                 file,
                 expire: data.expire,
-                token: data.token,
+                token: data.token,  
                 signature: data.signature,
                 publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
                 
@@ -103,7 +106,7 @@ const FileUpload = ({
             onSuccess(uploadResponse)
             console.log("Upload response:", uploadResponse);
             } catch (error) {
-                console.error("Upload failed")
+                console.error("Upload failed",error)
                 
             }finally{
                 setisUploading(false)
@@ -115,6 +118,7 @@ const FileUpload = ({
     return (
         <>
             <input type="file"
+            className='px-2 py-1 outline-none border duration-200 border-gray-500 rounded-lg focus:border-gray-300'  
             accept={fileType === 'video' ? "video/*" : "image/*"}
             onChange={handleFileChange}
             />
@@ -123,6 +127,7 @@ const FileUpload = ({
                     <span>Loading...</span>
                 )
             }
+           
         </>
     );
 };

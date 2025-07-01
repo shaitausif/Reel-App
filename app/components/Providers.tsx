@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 // To access the session in a component we can use the sessionProvider from next-auth/react
 import { SessionProvider } from "next-auth/react";
