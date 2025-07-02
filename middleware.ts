@@ -15,10 +15,12 @@ export default withAuth(
                     if(pathname.startsWith("/login") || pathname.startsWith("/register")){
                         return false
                     }
+                    return true
                 }
                 if(
                     (
-                    pathname.startsWith("/api/auth") ||
+                    pathname.startsWith("/api/auth") || 
+                    pathname.startsWith("/api/video") ||
                     pathname.startsWith("/login") || 
                     pathname.startsWith("/register") 
                     )
@@ -26,7 +28,7 @@ export default withAuth(
                     return true //  These paths are accessible without even having a token
                 }
                 if(
-                    pathname == '/' || pathname.startsWith('/api/videos')
+                    pathname.startsWith("/") || pathname.startsWith('/api/videos')
                 ){
                     return true
                 }

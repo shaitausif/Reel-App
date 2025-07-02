@@ -1,15 +1,20 @@
-"use client";
+'use client'
 import React, { useEffect, useState } from "react";
-import { Video } from "@imagekit/next";
+import { Image } from "@imagekit/next";
 import { IVideo } from "@/models/video.model";
+import { useRouter } from "next/navigation";
 
 const Videos = () => {
-  const [videos, setvideos] = useState([]);
+  const [videos, setvideos] = useState<IVideo[]>([]);
   const [loading, setloading] = useState(false);
+  const router = useRouter()
 
   useEffect(() => {
     fetchVideos();
   }, []);
+
+
+  
 
   const fetchVideos = async () => {
     try {
@@ -30,16 +35,45 @@ const Videos = () => {
 
   return (
     <>
-      {videos.length === 0 ? (
-        <div></div>
+    
+    <div className="py-6 px-4 md:px-8">
+      {loading ? (
+        <p className="text-center text-gray-400">Loading videos...</p>
+      ) : videos.length === 0 ? (
+        <p className="text-center text-gray-400">No videos found.</p>
       ) : (
-        videos.map((video: IVideo, i) => (
-          <div key={i} className="card md:px-4 bg-gray-700 w-fit flex flex-row">
-            <Video src={video?.videoUrl} width={200} height={500} controls />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+          {videos.map((video: IVideo, i) => (
+            <div
+              key={i} onClick={() => {
+                
+                  router.push(`/${video._id}`)
 
-          </div>
-        ))
+              }}
+              className="bg-gray-800 rounded-xl overflow-hidden shadow hover:shadow-lg hover:scale-[1.01] transition-all duration-300 hover:bg-gray-900 active:scale-110"
+            >
+              <div className="w-full h-[180px] bg-black flex items-center justify-center">
+                <Image
+                  alt="Video Thumbnail"
+                  src={video.thumbnailUrl}
+                  width={300}
+                  height={180}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4 flex flex-col gap-2">
+                <h2 className="text-white font-semibold text-lg line-clamp-1">
+                  {video.title}
+                </h2>
+                <p className="text-gray-400 text-sm line-clamp-2">
+                  {video.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
+    </div>
     </>
   );
 };

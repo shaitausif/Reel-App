@@ -24,6 +24,10 @@ const UploadFile = ({isMounted, onClose}: {isMounted: boolean, onClose:() => voi
     try {
       setisSubmitting(true)
       const videoData = {title, description, videoUrl, thumbnailUrl}
+      if(title.trim() =="" || description.trim() == ''){
+        alert("Please Enter the Title and Description")
+        return;
+      }
       const res = await fetch("/api/video",
         {method : "POST",
           headers : {
@@ -112,7 +116,7 @@ const UploadFile = ({isMounted, onClose}: {isMounted: boolean, onClose:() => voi
           } 
           </div>
           <div className='w-full flex gap-4 justify-center mt-4'>
-            <button className={`bg-blue-500 rounded-lg px-6 py-1.5 hover:bg-blue-600 duration-300 ${ !videoUrl ? 'bg-blue-400' : ''}`} disabled={(!videoUrl || !thumbnailUrl) && isSubmitting}>Submit</button>
+            <button className={`bg-blue-500 rounded-lg px-6 py-1.5 hover:bg-blue-600 duration-300 ${ !videoUrl ? 'bg-blue-400' : ''}`} disabled={(!videoUrl || !thumbnailUrl) || isSubmitting}>Submit</button>
             <button onClick={() => onClose()} type='button' className={`bg-red-500 rounded-lg px-6 py-1.5 hover:bg-red-600 duration-300`}>Cancel</button>
           </div>
         

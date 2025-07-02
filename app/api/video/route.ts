@@ -2,6 +2,7 @@
 
 import { authOptions } from "@/lib/authOptions";
 import ConnectDB from "@/lib/db";
+import User from "@/models/user.model";
 import Video, { IVideo } from "@/models/video.model";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,6 +16,7 @@ export async function GET() {
         const videos = await Video.find().sort({createdAt: -1}).lean()
 
         if(!videos || videos.length == 0){
+            
             return NextResponse.json([], {status : 200})
         }
 
@@ -36,7 +38,7 @@ export async function POST(req: NextRequest, res: NextResponse){
         if(!session){
             return NextResponse.json({error : "Unauthorized"},{status : 401})
         }
-
+        
         await ConnectDB()
         const body: IVideo = await req.json()
 
@@ -48,7 +50,6 @@ export async function POST(req: NextRequest, res: NextResponse){
                 {status : 400}
             )
         }
-
         const videoData = {
             ...body,
             controls : body.controls ?? true,

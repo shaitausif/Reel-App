@@ -31,6 +31,7 @@ const videoSchema = new Schema<IVideo>({
         type : String,
         required : true
     },
+   
     videoUrl : {
         type : String,
         required : true
